@@ -60,6 +60,12 @@ $(document).ready(function() {
 
   ////// Initialize //////
   //初期値に当日の日付を設定
+  function resetDate() {
+    var today = new Date();
+    var todayDate = formatDate(today, 'YYYY/MM/DD');
+    $('.select3 input, .select3-2 input').val(todayDate);
+    $('.select3 input, .select3-2 input').attr('placeholder', todayDate);
+  }
   resetDate();
   // 選択１以外非表示
   $('.select').hide();
@@ -85,6 +91,7 @@ $(document).ready(function() {
 
   // 選んだ質問以降の質問はやり直し
   $('.select1 .select_initial').click(function() {reset1();});
+  $('.select2-1 .select_initial,.select2-2 .select_initial').click(function() {reset2();});
 
   ////// 選択肢決定 //////
   $('.select li').click(function() {
@@ -99,12 +106,17 @@ $(document).ready(function() {
     type = $(this).attr('data-type');
     switch (type) {
       case 'smart':
+        sessionStorage.setItem('type', 'smart');
         $('.select2-1').fadeIn();
         break;
       case 'mobile':
+        sessionStorage.setItem('type', 'mobile');
         $('.select2-2').fadeIn();
         break;
       case 'wifi':
+        sessionStorage.setItem('type', 'wifi');
+        sessionStorage.removeItem('plan');
+        sessionStorage.removeItem('rank');
         $('.select3').fadeIn();
         break;
     }
@@ -117,7 +129,11 @@ $(document).ready(function() {
   $('.select2-1 li, .select2-2 li').click(function() {
     if($(this).hasClass('rank')) {
       rank = $(this).attr('data-rank');
+      sessionStorage.setItem('rank', $(this).attr('data-rank'));
+      sessionStorage.removeItem('plan');
     } else {
+      sessionStorage.setItem('plan', $(this).attr('data-plan'));
+      sessionStorage.removeItem('rank');
       plan = $(this).attr('data-plan');
     }
     if(simulateStatus === 'decided') {
@@ -139,6 +155,7 @@ $(document).ready(function() {
     setDate();
     closeSelect();
     notBeforeToday();
+    sessionStorage.setItem('startDate', $('.select3 input').val());
     if(validation === 'clear') {
       if(duration < 1) {
         $(this).val(savedStartDate);
@@ -161,6 +178,7 @@ $(document).ready(function() {
   $('.select3-2 input').change(function() {
     setDate();
     closeSelect();
+    sessionStorage.setItem('endDate', $('.select3-2 input').val());
     if(duration < 1) {
       $(this).val(savedEndDate);
       $('.select3-2').append('<p class="warning">レンタル開始日以降の日付を選択して下さい。</p>');
@@ -181,6 +199,7 @@ $(document).ready(function() {
 
   $('.select3-3 select').change(function() {
     closeSelect();
+    sessionStorage.setItem('terminal_num', $(this).val());
     how_many = htmlspecialchars($(this).val());
     if(type == 'smart') {
       $('.select4').fadeIn();
@@ -205,6 +224,7 @@ $(document).ready(function() {
 
   ////// 選択５ -> 結果表示 //////
   $('.select5 li').click(function() {
+    sessionStorage.setItem('shipping', $(this).attr('data-shipping'));
     shipping = $(this).attr('data-shipping');
     calculatePrice();
     showPrice();
@@ -222,6 +242,7 @@ $(document).ready(function() {
     plan = '';
     sim = '';
 
+
     $('.select3-3 select option:first-child').prop('selected',true);
     $('.select2-1 .select_initial').text(temp_text[2][0]);
     $('.select2-2 .select_initial').text(temp_text[2][1]);
@@ -231,19 +252,10 @@ $(document).ready(function() {
     $('.select2-1,.select2-2,.select3, .select3-2, .select3-3, .select4,.select5').hide();
     resetDate();
   }
-
   function closeSelect() {
     $('.select_initial').next('ul').hide();
     $('.select_initial').removeClass('open');
     $('.warning').hide();
-  }
-
-  //初期値に当日の日付を設定
-  function resetDate() {
-    var today = new Date();
-    var todayDate = formatDate(today, 'YYYY/MM/DD');
-    $('.select3 input, .select3-2 input').val(todayDate);
-    $('.select3 input, .select3-2 input').attr('placeholder', todayDate);
   }
 
   // exclusive closeSelect
@@ -376,6 +388,7 @@ $(document).ready(function() {
       duration = days + 1;
   }
 
+
   // 当日以前の日付選択不可
   function notBeforeToday() {
     today = new Date();
@@ -414,6 +427,6 @@ $(document).ready(function() {
     var d0 = ('00' + d).slice(-2);
     return y0 + m0 + d0;
   }
-
+  
 
 });
