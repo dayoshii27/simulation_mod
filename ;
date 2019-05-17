@@ -1,0 +1,11 @@
+select2 automatically clicked
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# Date:      Fri May 17 14:15:53 2019 +0900
+#
+# On branch auto_select2
+# Changes to be committed:
+#	modified:   simulator.js
+#
