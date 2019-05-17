@@ -102,7 +102,8 @@ $(document).ready(function() {
         $('.select2-1').fadeIn();
         break;
       case 'mobile':
-        $('.select2-2').fadeIn();
+        $('.select2-2').show();
+        $('.select2-2').find('ul li').click();
         break;
       case 'wifi':
         $('.select3').fadeIn();
@@ -196,6 +197,16 @@ $(document).ready(function() {
   ////// 選択４ //////
   $('.select4 li').click(function() {
     sim = $(this).attr('data-sim');
+    if(simulateStatus === 'decided') {
+      calculatePrice();
+      showPrice();
+    }
+    $('.select4-2').fadeIn();
+  });
+
+  ////// 選択４-2 //////
+  $('.select4-2 li').click(function() {
+
     if(simulateStatus === 'decided') {
       calculatePrice();
       showPrice();
