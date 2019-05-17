@@ -102,7 +102,8 @@ $(document).ready(function() {
         $('.select2-1').fadeIn();
         break;
       case 'mobile':
-        $('.select2-2').fadeIn();
+        $('.select2-2').show();
+        $('.select2-2').find('ul li:nth-of-type(2)').click();
         break;
       case 'wifi':
         $('.select3').fadeIn();
